@@ -1,0 +1,433 @@
+//bucket sort
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+// Define a structure for linked list nodes
+struct Node {
+    double data;
+    Node* next;
+};
+
+// Insertion sort for sorting the linked list
+Node* insertionSort(Node* head) {
+    if (!head || !head->next) {
+        return head;
+    }
+
+    Node* sorted = nullptr;
+    Node* current = head;
+
+    while (current) {
+        Node* next = current->next;
+
+        if (!sorted || current->data < sorted->data) {
+            current->next = sorted;
+            sorted = current;
+        } else {
+            Node* search = sorted;
+            while (search->next && current->data > search->next->data) {
+                search = search->next;
+            }
+            current->next = search->next;
+            search->next = current;
+        }
+
+        current = next;
+    }
+
+    return sorted;
+}
+
+// Bucket sort implementation
+vector<double> bucketSort(vector<double>& arr) {
+    int n = arr.size();
+    if (n <= 1) {
+        return arr;
+    }
+
+    // Find the minimum and maximum values in the array
+    double min_val = arr[0];
+    double max_val = arr[0];
+
+    for (int i = 1; i < n; ++i) {
+        if (arr[i] < min_val) {
+            min_val = arr[i];
+        } else if (arr[i] > max_val) {
+            max_val = arr[i];
+        }
+    }
+
+    // Create empty buckets
+    int num_buckets = n;
+    vector<Node*> buckets(num_buckets, nullptr);
+
+    // Distribute elements into buckets
+    double range = (max_val - min_val) / num_buckets;
+
+    for (int i = 0; i < n; ++i) {
+        int bucket_index = static_cast<int>((arr[i] - min_val) / range);
+
+        Node* new_node = new Node{arr[i], nullptr};
+
+        if (!buckets[bucket_index]) {
+            buckets[bucket_index] = new_node;
+        } else {
+            // Insert at the beginning of the linked list
+            new_node->next = buckets[bucket_index];
+            buckets[bucket_index] = new_node;
+        }
+    }
+
+    // Sort each bucket and concatenate them
+    vector<double> sorted_arr;
+    for (int i = 0; i < num_buckets; ++i) {
+        if (buckets[i]) {
+            Node* sorted_bucket = insertionSort(buckets[i]);
+            while (sorted_bucket) {
+                sorted_arr.push_back(sorted_bucket->data);
+                Node* temp = sorted_bucket;
+                sorted_bucket = sorted_bucket->next;
+                delete temp; // Free memory
+            }
+        }
+    }
+
+    return sorted_arr;
+}
+
+int main() {
+    vector<double> arr = {0.42, 0.32, 0.33, 0.52, 0.37, 0.47, 0.51};
+
+    vector<double> sorted_arr = bucketSort(arr);
+
+    cout << "Sorted Array: ";
+    for (double num : sorted_arr) {
+        cout << num << " ";
+    }
+    cout << endl;
+
+    return 0;
+}
+
+//k merge sort
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+// Define a structure for linked list nodes
+struct ListNode {
+    int val;
+    ListNode* next;
+    ListNode(int x) : val(x), next(NULL) {}
+};
+
+// Function to merge two sorted linked lists
+ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+    if (!l1) return l2;
+    if (!l2) return l1;
+    
+    if (l1->val < l2->val) {
+        l1->next = mergeTwoLists(l1->next, l2);
+        return l1;
+    } else {
+        l2->next = mergeTwoLists(l1, l2->next);
+        return l2;
+    }
+}
+
+// Function to merge K sorted linked lists
+ListNode* mergeKLists(vector<ListNode*>& lists) {
+    int n = lists.size();
+    if (n == 0) return NULL;
+    
+    // Perform a pairwise merge of lists
+    while (n > 1) {
+        int k = (n + 1) / 2; // Round up for odd n
+        for (int i = 0; i < n / 2; i++) {
+            lists[i] = mergeTwoLists(lists[i], lists[i + k]);
+        }
+        n = k;
+    }
+    
+    return lists[0];
+}
+
+// Function to print a linked list
+void printList(ListNode* head) {
+    while (head) {
+        cout << head->val << " ";
+        head = head->next;
+    }
+    cout << endl;
+}
+
+int main() {
+    // Create a few sorted linked lists
+    ListNode* list1 = new ListNode(1);
+    list1->next = new ListNode(4);
+    list1->next->next = new ListNode(5);
+
+    ListNode* list2 = new ListNode(1);
+    list2->next = new ListNode(3);
+    list2->next->next = new ListNode(4);
+
+    ListNode* list3 = new ListNode(2);
+    list3->next = new ListNode(6);
+
+    // Create a vector of linked lists
+    vector<ListNode*> lists = {list1, list2, list3};
+
+    // Merge the sorted linked lists
+    ListNode* mergedList = mergeKLists(lists);
+
+    // Print the merged list
+    printList(mergedList);
+
+    return 0;
+}
+//selection sort
+#include <iostream>
+
+using namespace std;
+
+// Define a structure for linked list nodes
+struct ListNode {
+    int data;
+    ListNode* next;
+    ListNode(int val) : data(val), next(nullptr) {}
+};
+
+// Function to print a linked list
+void printList(ListNode* head) {
+    while (head) {
+        cout << head->data << " ";
+        head = head->next;
+    }
+    cout << endl;
+}
+
+// Function to perform selection sort on a linked list
+ListNode* selectionSort(ListNode* head) {
+    if (!head || !head->next) {
+        return head; // Already sorted or empty list
+    }
+
+    ListNode* sortedHead = nullptr; // Initialize the sorted list
+    ListNode* current = head;
+
+    while (current) {
+        // Find the minimum node in the remaining unsorted part
+        ListNode* minNode = current;
+        ListNode* temp = current->next;
+
+        while (temp) {
+            if (temp->data < minNode->data) {
+                minNode = temp;
+            }
+            temp = temp->next;
+        }
+
+        // Remove the minNode from the original list
+        if (minNode == current) {
+            current = current->next;
+        } else {
+            temp = current;
+            while (temp->next != minNode) {
+                temp = temp->next;
+            }
+            temp->next = minNode->next;
+        }
+
+        // Add the minNode to the sorted list
+        if (!sortedHead) {
+            sortedHead = minNode;
+            minNode->next = nullptr;
+        } else {
+            minNode->next = sortedHead;
+            sortedHead = minNode;
+        }
+    }
+
+    return sortedHead;
+}
+
+int main() {
+    ListNode* head = new ListNode(64);
+    head->next = new ListNode(34);
+    head->next->next = new ListNode(25);
+    head->next->next->next = new ListNode(12);
+    head->next->next->next->next = new ListNode(22);
+
+    cout << "Original Linked List: ";
+    printList(head);
+
+    // Perform selection sort on the linked list
+    head = selectionSort(head);
+
+    cout << "Sorted Linked List: ";
+    printList(head);
+
+    return 0;
+}
+//quick sort
+#include <iostream>
+
+using namespace std;
+
+// Define a structure for linked list nodes
+struct ListNode {
+    int data;
+    ListNode* next;
+    ListNode(int val) : data(val), next(nullptr) {}
+};
+
+// Function to print a linked list
+void printList(ListNode* head) {
+    while (head) {
+        cout << head->data << " ";
+        head = head->next;
+    }
+    cout << endl;
+}
+
+// Function to concatenate two linked lists
+ListNode* concatenate(ListNode* left, ListNode* pivot, ListNode* right) {
+    ListNode* result = left;
+
+    while (left && left->next) {
+        left = left->next;
+    }
+
+    if (left) {
+        left->next = pivot;
+    } else {
+        result = pivot;
+    }
+
+    while (pivot && pivot->next) {
+        pivot = pivot->next;
+    }
+
+    if (pivot) {
+        pivot->next = right;
+    }
+
+    return result;
+}
+
+// Function to partition the linked list into three parts
+ListNode* partition(ListNode* head, ListNode*& pivot, ListNode*& greater) {
+    if (!head) {
+        pivot = nullptr;
+        greater = nullptr;
+        return nullptr;
+    }
+
+    ListNode* pivot_head = nullptr;
+    ListNode* pivot_tail = nullptr;
+    ListNode* left = nullptr;
+    greater = nullptr;
+
+    int pivot_value = head->data;
+    ListNode* current = head;
+
+    while (current) {
+        ListNode* next = current->next;
+        current->next = nullptr;
+
+        if (current->data < pivot_value) {
+            if (!left) {
+                left = current;
+            } else {
+                ListNode* left_tail = left;
+                while (left_tail->next) {
+                    left_tail = left_tail->next;
+                }
+                left_tail->next = current;
+            }
+        } else if (current->data == pivot_value) {
+            if (!pivot_head) {
+                pivot_head = current;
+                pivot_tail = current;
+            } else {
+                pivot_tail->next = current;
+                pivot_tail = current;
+            }
+        } else {
+            if (!greater) {
+                greater = current;
+            } else {
+                ListNode* greater_tail = greater;
+                while (greater_tail->next) {
+                    greater_tail = greater_tail->next;
+                }
+                greater_tail->next = current;
+            }
+        }
+
+        current = next;
+    }
+
+    pivot = pivot_head;
+    return left;
+}
+
+// Function to perform quick sort on a linked list
+ListNode* quickSort(ListNode* head) {
+    if (!head || !head->next) {
+        return head; // Already sorted or empty list
+    }
+
+    ListNode* pivot = nullptr;
+    ListNode* greater = nullptr;
+
+    // Partition the list into three parts
+    ListNode* left = partition(head, pivot, greater);
+
+    // Recursively sort the left and greater parts
+    left = quickSort(left);
+    greater = quickSort(greater);
+
+    // Concatenate the three parts
+    return concatenate(left, pivot, greater);
+}
+
+int main() {
+    ListNode* head = new ListNode(64);
+    head->next = new ListNode(34);
+    head->next->next = new ListNode(25);
+    head->next->next->next = new ListNode(12);
+    head->next->next->next->next = new ListNode(22);
+
+    cout << "Original Linked List: ";
+    printList(head);
+
+    // Perform quick sort on the linked list
+    head = quickSort(head);
+
+    cout << "Sorted Linked List: ";
+    printList(head);
+
+    return 0;
+}
+//rand fun
+#include <cstdlib> // for rand() and srand()
+#include <ctime>   // for seeding the random number generator
+
+int main() {
+    // Seed the random number generator using the current time
+    srand(static_cast<unsigned>(time(nullptr)));
+
+    // Generate a random integer between 0 and RAND_MAX
+    int randomNumber = rand();
+
+    // To generate a random integer within a specific range, you can use the modulo operator (%)
+    int minRange = 1;
+    int maxRange = 100;
+    int randomInRange = minRange + (rand() % (maxRange - minRange + 1));
+
+    return 0;
+}
