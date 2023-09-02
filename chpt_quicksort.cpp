@@ -7,7 +7,10 @@ struct ListNode {
     int data;
     ListNode* next;
     ListNode* prev;
-    ListNode(int val) : data(val), next(nullptr), prev(nullptr) {}
+    ListNode(int val)  {
+        data = val;
+        next = prev = NULL;
+    }
 };
 
 // Function to insert a new node at the end of the doubly linked list
@@ -28,30 +31,9 @@ void insertAtEnd(ListNode*& head, int val) {
 // Function to swap two nodes in a doubly linked list
 void swapNodes(ListNode* node1, ListNode* node2) {
     if (node1 == node2) return;
-
-    // Swap the next pointers
-    ListNode* temp = node1->next;
-    node1->next = node2->next;
-    node2->next = temp;
-
-    if (node1->next) {
-        node1->next->prev = node1;
-    }
-    if (node2->next) {
-        node2->next->prev = node2;
-    }
-
-    // Swap the prev pointers
-    temp = node1->prev;
-    node1->prev = node2->prev;
-    node2->prev = temp;
-
-    if (node1->prev) {
-        node1->prev->next = node1;
-    }
-    if (node2->prev) {
-        node2->prev->next = node2;
-    }
+    int temp = node1->data;
+    node1->data = node2->data;
+    node2->data = temp;
 }
 
 // Function to partition a doubly linked list
@@ -81,7 +63,7 @@ void quickSort(ListNode* left, ListNode* right) {
     }
 }
 
-// Function to perform quick sort on a doubly linked list
+// Function to perform quick sort on a doubly linked list by finding the end node
 ListNode* quickSortList(ListNode* head) {
     ListNode* tail = head;
     while (tail != nullptr && tail->next != nullptr) {
