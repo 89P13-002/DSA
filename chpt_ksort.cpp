@@ -7,11 +7,14 @@ struct ListNode {
     int data;
     ListNode* next;
     ListNode* prev;
-    ListNode(int val) : data(val), next(nullptr), prev(nullptr) {}
+    ListNode(int val) {
+        data = val;
+        next = prev = NULL;
+    }
 };
 
 // Function to insert a new node at the end of the doubly linked list
-void insertAtEnd(ListNode*& head, int val) {
+void insertAtEnd(ListNode* &head, int val) {
     ListNode* newNode = new ListNode(val);
     if (!head) {
         head = newNode;
@@ -31,7 +34,7 @@ ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
     ListNode* tail = &dummy;
 
     while (list1 && list2) {
-        if (list1->data < list2->data) {
+        if (list1->data <= list2->data) {
             tail->next = list1;
             list1->prev = tail;
             list1 = list1->next;
@@ -94,15 +97,17 @@ int main() {
     ListNode* head = nullptr;
 
     // Insert elements into the doubly linked list
-    insertAtEnd(head, 8);
-    insertAtEnd(head, 3);
-    insertAtEnd(head, 1);
-    insertAtEnd(head, 6);
-    insertAtEnd(head, 4);
-    insertAtEnd(head, 7);
-    insertAtEnd(head, 2);
-    insertAtEnd(head, 5);
+    cout<<"Enter number of element in the linkedlist"<<endl;
+    int size,i=0;
+    cin>>size;
+    cout<<"Enter the element of the doubly linkedlist "<<endl;
+    while(i<size){
+        int v1;
+        cin>>v1;
+        insertAtEnd(head, v1);
+        i++;
 
+    }
     cout << "Original Doubly Linked List: ";
     printList(head);
 
