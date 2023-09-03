@@ -17,18 +17,20 @@ int main(){
     int low,high,mid;
     mid = low = 0;
     high = 11;
+    i=0;
     while(mid<=high){
-        if(arr[i]==0){
+        if(arr[mid]==0){
             swap(arr,low,mid);
             low++;mid++;
         }
-        else if(arr[i]==1){
+        else if(arr[mid]==1){
             mid++;
         }
         else{
             swap(arr,mid,high);
             high--;
         }
+        
     }
     for(i=0;i<12;i++){
         cout<<arr[i]<<" ";
