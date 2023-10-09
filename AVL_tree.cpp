@@ -192,6 +192,12 @@ void avl :: insert(node* n){
             temp2->r_height = max(temp1->glh(),temp1->grh())+1;
         }
         if((abs(temp2->glh() - temp2->grh())>1)){
+            if(temp1 == temp2->left){
+            temp2->l_height = max(temp1->glh(),temp1->grh())+1;
+            }
+            else if (temp1 == temp2->right){
+            temp2->r_height = max(temp1->glh(),temp1->grh())+1;
+            }
             break;
         }
         temp1 = temp2;
@@ -346,15 +352,15 @@ void avl :: left_right_rotate(node* n1,node* &root){
 
     //update height
     if(n5 != NULL){
-        n2->r_height = (max(n2->right->glh(),n2->right->grh())) +1;
+        n2->r_height = (max(n5->glh(),n5->grh())) +1;
     }
     if(n5 == NULL){
         n2->r_height = 0;
     }
     if(n6 != NULL){
-        n1->l_height = (max(n1->left->glh(),n1->left->grh())) +1;
+        n1->l_height = (max(n6->glh(),n6->grh())) +1;
     }
-    if(n5 == NULL){
+    if(n6 == NULL){
         n1->l_height = 0;
     }
     n3->l_height = (max(n3->left->glh(),n3->left->grh()))+1;
@@ -401,7 +407,7 @@ void avl :: right_left_rotate(node* n1,node* &root){
     if(n6 != NULL){
         n2->l_height = (max(n2->left->glh(),n2->left->grh())) +1;
     }
-    if(n5 == NULL){
+    if(n6 == NULL){
         n2->l_height = 0;
     }
     n3->l_height = (max(n3->left->glh(),n3->left->grh()))+1;
