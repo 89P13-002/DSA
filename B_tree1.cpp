@@ -56,10 +56,10 @@ node* node ::splitNode(int &v, node *n)
         swap(nd[j], nd[j + 1]);
         j--;
     }
-    if (j == 0)
-    {
-        swap(nd[j], nd[j + 1]);
-    }
+    // if (j == 0)
+    // {
+    //     swap(nd[j], nd[j + 1]);
+    // }
     node* rt;
     rt = new node(isLeaf, capacity);
     for (i = 0; i < capacity; i++)
@@ -249,17 +249,23 @@ void BTree ::insert(int key)
             tt->numKeys = b + 1;
             
             int g;
+            int f =0;
             for (g = b; g > 0; g--)
-            {
+            {   
+                f=1;
                 if (tt->keys[g] > tt->keys[g - 1])
                 {
                     swap(tt->keys[g], tt->keys[g - 1]);
+                    swap(tt->children[g+1],tt->children[g]);
                 }
                 else
                 {
                     break;
                 }
             }
+            // if(g==0 && f==1){
+            //     swap(tt->children[g+1],tt->children[g]);
+            // }
         }
         while(!ip.empty()){
             ip.pop();
@@ -297,32 +303,40 @@ node* BTree :: search( int val, int &pos)
 int main()
 {
     BTree* bt;
-    bt = new BTree(4);
-    bt->insert(14);
-    bt->insert(13);
-    bt->insert(4);
-    bt->insert(1);
-    bt->insert(5);
-    bt->insert(3);
-    bt->insert(2);
-    bt->insert(-10);
-    bt->insert(-2);
-    bt->insert(-3);
-    bt->insert(-5);
-    bt->insert(-7);
-    bt->insert(-8);
-    bt->insert(-13);
-    bt->insert(-12);
-    bt->insert(-15);
-    bt->insert(-14);
-    bt->insert(12);
+    bt = new BTree(2);
+    bt->insert(40);
+    bt->insert(30);
+    bt->insert(50);
+    bt->insert(55);
+    // bt->insert(25);
+    bt->insert(60);
+    bt->insert(65);
+    bt->insert(75);
+    bt->insert(61);
+    bt->insert(62);
+    bt->insert(63);
+    bt->insert(64);
+    // bt->insert(3);
+    // bt->insert(2);
+    // bt->insert(-10);
+    // bt->insert(-2);
+    // bt->insert(-3);
+    // bt->insert(-5);
+    // bt->insert(-7);
+    // bt->insert(-8);
+    // bt->insert(-13);
+    // bt->insert(-12);
+    // bt->insert(-15);
+    // bt->insert(-14);
+    // bt->insert(12);
     // bt->root->children[1]->printKey();
-    // bt->printTree();
-    // bt->root->printKey();
-    bt->root->children[1]->children[2]->printKey();
-    int v=0;
-    node* b ;
-    b = bt->search(90,v);
+     bt->printTree();
+    //bt->root->printKey();
+    bt->root->children[2]->children[1]->printKey();
+    // int v=0;
+    // node* b ;
+    // b = bt->search(90,v);
+    //bt->root->children[1]->printKey();
     return 0;
 }
 
