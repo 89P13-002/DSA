@@ -151,7 +151,8 @@ public:
         maxcap = v;
     }
     void insert(int key);
-    node *search(node *, int val, int &pos);
+    node*search( int val, int &pos);
+    node* sch(node*,int,int &);
     void printTree();
     void ptr(node*);
 };
@@ -266,8 +267,10 @@ void BTree ::insert(int key)
     }
     return;
 }
-node *search(node *r, int val, int &pos)
-{
+node* BTree :: sch(node* r,int val ,int &pos){
+    if(r==NULL){
+        return NULL;
+    }
     int i = 0;
     while (i < r->numKeys && val < r->keys[i])
     {
@@ -276,13 +279,19 @@ node *search(node *r, int val, int &pos)
     if (i < r->numKeys && val == r->keys[i])
     {
         pos = i;
+        cout<<"Found"<<endl;
         return r;
     }
     else if (r->isLeaf)
     {
         return NULL;
     }
-    return (search(r->children[i], val, pos));
+    return (sch(r->children[i], val, pos));
+}
+node* BTree :: search( int val, int &pos)
+{
+    
+    return (sch(root,val,pos));
 }
 
 int main()
@@ -311,6 +320,9 @@ int main()
     // bt->printTree();
     // bt->root->printKey();
     bt->root->children[1]->children[2]->printKey();
+    int v=0;
+    node* b ;
+    b = bt->search(90,v);
     return 0;
 }
 
