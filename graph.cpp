@@ -21,7 +21,13 @@ class graph{
 graph :: graph(int v,int e){
     vertx_num = v;
     edg_num = e;
-    vector<vector<int>> adj_mat(vertx_num+1 , vector<int> (vertx_num+1, 0));
+    adj_mat.resize(vertx_num+1);
+    for(int i=0;i<vertx_num+1;i++){
+        for(int j=0;j<vertx_num+1;j++){
+            adj_mat[i].push_back(0);
+        }
+    }
+    //vector<vector<int>> adj_mat(vertx_num+1 , vector<int> (vertx_num+1, 0));
     adj_ls.resize(vertx_num+1);
 }
 bool graph :: cycle(int i){
@@ -125,8 +131,8 @@ void graph :: input(){
     for(i=0;i<edg_num;i++){
         cin>>x;
         cin>>y;
-        // adj_mat[x][y] = 1;
-        // adj_mat[y][x] = 1;
+        adj_mat[x][y] = 1;
+        adj_mat[y][x] = 1;
         adj_ls[x].push_back(y);
         adj_ls[y].push_back(x);
     }
@@ -155,15 +161,15 @@ int main(){
     graph* g;
     g = new graph(vertex_num,edge_num);
     g->input(); 
-    if(g->cycle(2)){
-        cout<<"sjdnf"<<endl;
-    }
-    //g->adj_list_print();
-    // g->adj_mat_print();
-    // int t;
-    // cout<<"Enter start"<<endl;
-    // cin>>t;
-    // g->BFS(t);
-    // g->DFS();
+    // if(g->cycle(2)){
+    //     cout<<"sjdnf"<<endl;
+    // }
+    g->adj_list_print();
+    g->adj_mat_print();
+    int t;
+    cout<<"Enter start"<<endl;
+    cin>>t;
+    g->BFS(t);
+    g->DFS();
     return 0;
 }
