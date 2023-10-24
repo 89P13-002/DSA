@@ -54,6 +54,7 @@ void graph :: DFS(){
     cin>>st;
     order.push_back(make_pair(st,0));
     dfs(st,visited,order);
+    cout<<endl;
     int i;
     for(i=0;i<order.size();i++){
         cout<<order[i].first<<" "<<order[i].second<<endl;
